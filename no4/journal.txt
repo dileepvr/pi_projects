@@ -1,0 +1,57 @@
+/************************************************/
+10/07/17 - Dileep
+/************************************************/
+
+Burning raspbian on an a 4GB micro SD HCI card
+
+Instructions on: https://www.raspberrypi.org/documentation/installation/installing-images/
+
+Going for raspbian stretch lite.
+
+Command to copy:
+
+> dd bs=4M if=2017-09-07-raspbian-stretch.img of=/dev/sdX status=progress conv=fsync
+
+Mounted boot partition from card and opened config.txt.
+Appended the lines:
+"
+# Enable UART
+enable_uart=1
+"
+to the end of file.
+
+Headless Wifi setup instructions on:
+
+https://core-electronics.com.au/tutorials/raspberry-pi-zerow-headless-wifi-setup.html
+
+Create new file called 'wpa_supplicant.conf' in boot partition.
+
+To enable  wifi, added lines:
+"
+country=US
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+network={
+    ssid="SSID"
+    psk="password"
+    key_mgmt=WPA-PSK
+}
+"
+to that file, with actual wifi ssid and password going in.
+See: https://raspberrypi.stackexchange.com/questions/68808/raspberry-pi-zero-w-keeps-deleting-wpa-supplicant-conf-and-ssh-file
+
+To enable ssh, just create a file named 'ssh' in boot partition.	
+
+The removal of the ssh and wpa_supplicant.conf files on boot is
+normal. Once the RPi boots, everything should be persistent and the
+network and ssh available on subsequent boots. If you want to keep
+copies "just in case", you can create a .zip archive of those files in
+/boot and it will not be removed.
+
+RPi MAC address is: B8-27-EB-8E-F9-22
+
+To change hostname, mounted remaining partition. Then edited the file
+'/etc/hostname', as well as the 127.0.0.1 entry in '/etc/hosts.'
+
+Then I set the home router to statically assign an IP address to the
+RPi's mac address.
