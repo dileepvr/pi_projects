@@ -10,7 +10,7 @@ Going for raspbian stretch lite.
 
 Command to copy:
 
-> dd bs=4M if=2017-09-07-raspbian-stretch.img of=/dev/sdX status=progress conv=fsync
+> dd bs=4M if=raspbian-stretch.img of=/dev/sdX status=progress conv=fsync
 
 Mounted boot partition from card and opened config.txt.
 Appended the lines:
@@ -47,8 +47,6 @@ normal. Once the RPi boots, everything should be persistent and the
 network and ssh available on subsequent boots. If you want to keep
 copies "just in case", you can create a .zip archive of those files in
 /boot and it will not be removed.
-
-RPi MAC address is: B8-27-EB-8E-F9-22
 
 To change hostname, mounted remaining partition. Then edited the file
 '/etc/hostname', as well as the 127.0.0.1 entry in '/etc/hosts.'
