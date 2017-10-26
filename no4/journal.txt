@@ -53,3 +53,55 @@ To change hostname, mounted remaining partition. Then edited the file
 
 Then I set the home router to statically assign an IP address to the
 RPi's mac address.
+
+/************************************************/
+10/25/17 - Dileep
+/************************************************/
+
+Used raspi-config tool to expand file system.
+
+Disabled HDMI by running /usr/bin/tvservice -o (-p to re-enable). Added the line to /etc/rc.local to disable HDMI on boot.
+
+Installed uptimed from apt-get.
+
+For webserver, also installed lighttpd.
+Following advice from: http://www.penguintutor.com/linux/light-webserver
+
+PHP version 5 is outdated. Instead ran:
+
+> sudo apt-get install php7.0-common php7.0-cgi php7.0
+
+Screw sql.
+
+To enable the server to handle php scripts the fastcgi-php module should be enabled by issuing in the command
+> sudo lighttpd-enable-mod fastcgi-php
+Then reload the server using
+> sudo service lighttpd force-reload
+
+Change the directory owner and group
+> sudo chown www-data:www-data /var/www
+allow the group to write to the directory
+> sudo chmod 775 /var/www
+Add the pi user to the www-data group
+> sudo usermod -a -G www-data pi
+
+Then created index.php in /var/www/html folder with contents:
+
+
+  <!doctype html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <title>No. 4 internal webpage</title>
+  </head>
+  <body>
+    <h1>Uptime records</h1>
+    <?php
+       $myoutput = `/usr/bin/uprecords -a -B`;
+       echo "<pre>",$myoutput,"</pre>";
+       ?>
+  </body>
+  </html>
+
+
+Works!
